@@ -1,6 +1,6 @@
-<h1 align="center">Olá, eu sou o Bruno 👋</h1>
+<h1 align="center">Hello, there 👋</h1>
 
-<h3 align="center">Minhas contribuições, vistas como um grafo</h3>
+<h3 align="center">Contribuitons: </h3>
 
 <div align="center">
   <picture>
