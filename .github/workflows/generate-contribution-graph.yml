@@ -1,0 +1,70 @@
+name: Generate contribution graph
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '17 3 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: contribution-graph-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the profile repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify graph algorithms and SVG output
+        run: npm test
+
+      - name: Generate light and dark contribution graphs
+        run: npm run generate
+        env:
+          GITHUB_USER: ${{ github.repository_owner }}
+          GITHUB_TOKEN: ${{ secrets.CONTRIBUTIONS_TOKEN || github.token }}
+
+      - name: Publish SVG files to the output branch
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          publish_root="$(mktemp -d)"
+          publish_dir="$publish_root/output"
+
+          if git ls-remote --exit-code --heads origin output >/dev/null 2>&1; then
+            git fetch origin output:refs/remotes/origin/output
+            git worktree add --detach "$publish_dir" origin/output
+          else
+            git worktree add --orphan -b output "$publish_dir"
+          fi
+
+          cp dist/github-contribution-graph.svg "$publish_dir/"
+          cp dist/github-contribution-graph-dark.svg "$publish_dir/"
+
+          cd "$publish_dir"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add github-contribution-graph.svg github-contribution-graph-dark.svg
+
+          if git diff --cached --quiet; then
+            echo "Contribution graph is already up to date."
+            exit 0
+          fi
+
+          git commit -m "chore: update contribution graph"
+          git push origin HEAD:output

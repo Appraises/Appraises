@@ -1,16 +1,17 @@
-## Hi there 👋
+<h1 align="center">Olá, eu sou o Bruno 👋</h1>
 
-<!--
-**Appraises/Appraises** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+<h3 align="center">Minhas contribuições, vistas como um grafo</h3>
 
-Here are some ideas to get you started:
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="/../output/github-contribution-graph-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="/../output/github-contribution-graph.svg">
+    <img alt="Grafo de contribuições do GitHub explorado com DFS e BFS" src="/../output/github-contribution-graph.svg">
+  </picture>
+</div>
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+<p align="center">
+  <sub>DFS em roxo · BFS em azul · vértice atual em amarelo</sub>
+</p>
+
+<!-- As próximas seções pessoais do perfil entram aqui. -->

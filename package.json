@@ -1,0 +1,15 @@
+{
+  "name": "github-contribution-graph-traversal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Animated GitHub contribution graph explored with alternating DFS and BFS traversals.",
+  "scripts": {
+    "generate": "node src/cli.mjs",
+    "generate:demo": "node src/cli.mjs --demo",
+    "test": "node --test --experimental-test-isolation=none"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
