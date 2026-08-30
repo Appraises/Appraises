@@ -54,3 +54,21 @@ test('light and dark variants preserve different GitHub palettes', () => {
   assert.match(dark, /#39d353/);
   assert.notEqual(light, dark);
 });
+
+test('places month labels on the week containing day one without collisions', () => {
+  const source = createDemoCalendar();
+  const graph = buildGraph(source.calendar);
+  const timeline = buildTimeline(graph, planTraversals(graph));
+  const svg = renderContributionGraph({ graph, timeline, theme: 'light' });
+  const labels = [...svg.matchAll(/<text x="([\d.]+)" y="10">([A-Z][a-z]{2})<\/text>/g)]
+    .map((match) => ({ x: Number(match[1]), label: match[2] }));
+
+  assert.equal(labels[0].label, 'Sep');
+  assert.equal(labels.at(-1).label, 'Aug');
+  for (let index = 1; index < labels.length; index += 1) {
+    assert.ok(
+      labels[index].x - labels[index - 1].x >= 26,
+      `${labels[index - 1].label} overlaps ${labels[index].label}`,
+    );
+  }
+});

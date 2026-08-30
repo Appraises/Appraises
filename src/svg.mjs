@@ -325,9 +325,14 @@ function renderCalendarLabels(graph) {
   const monthLabels = [];
   let previousMonth = null;
   for (const week of graph.calendar.weeks) {
-    const firstCell = week.contributionDays.find(Boolean);
-    if (!firstCell) continue;
-    const date = new Date(`${firstCell.date}T00:00:00Z`);
+    const monthStartCell = week.contributionDays.find((cell) => {
+      if (!cell) return false;
+      const date = new Date(`${cell.date}T00:00:00Z`);
+      return date.getUTCDate() === 1;
+    });
+    if (!monthStartCell) continue;
+
+    const date = new Date(`${monthStartCell.date}T00:00:00Z`);
     const month = date.getUTCMonth();
     if (month === previousMonth) continue;
     previousMonth = month;
@@ -336,7 +341,7 @@ function renderCalendarLabels(graph) {
       timeZone: 'UTC',
     }).format(date);
     monthLabels.push(
-      `<text x="${cellX(firstCell)}" y="10">${label}</text>`,
+      `<text x="${cellX(monthStartCell)}" y="10">${label}</text>`,
     );
   }
 
